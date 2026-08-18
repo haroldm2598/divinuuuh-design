@@ -1,69 +1,143 @@
-import Image from "next/image";
-
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    return (
+        <main className="home">
+            <section className="hero">
+                <div className="announce">
+                    <span className="dot">
+                        <span className="pulse" />
+                    </span>
+                    <p>Available for select product design projects</p>
+                </div>
+
+                <h1>
+                    Design systems that feel premium and perform beautifully.
+                </h1>
+
+                <p className="subtitle">
+                    Branding • UX strategy • Product design • Creative direction
+                </p>
+
+                <div className="actions">
+                    <button className="cta">Start a project</button>
+                    <button className="btn btn--secondary demo">
+                        View case studies
+                    </button>
+                </div>
+
+                <div className="upload-shell">
+                    <div className="grid-overlay" />
+                    <div className="upload-card">
+                        <div className="upload-head">
+                            <div className="upload-icon">
+                                <span className="icon">✦</span>
+                            </div>
+                            <h3>Creative direction for bold brands</h3>
+                            <p>
+                                From strategy to launch visuals, we shape
+                                standout digital experiences.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="projects" id="work">
+                <div className="section-inner">
+                    <div className="section-head">
+                        <div className="copy">
+                            <h2>Selected work</h2>
+                            <p>
+                                Thoughtful product storytelling, polished
+                                interfaces, and visual systems built for modern
+                                teams.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="projects-grid">
+                        <article className="project-card">
+                            <div className="preview">
+                                <div className="badge">
+                                    <span>Brand</span>
+                                </div>
+                            </div>
+                            <div className="card-body">
+                                <div>
+                                    <h3>Northstar Studio</h3>
+                                    <div className="meta">
+                                        <span>Brand refresh</span>
+                                        <span>2026</span>
+                                    </div>
+                                </div>
+                                <div className="arrow">→</div>
+                            </div>
+                        </article>
+
+                        <article className="project-card">
+                            <div className="preview">
+                                <div className="badge">
+                                    <span>Product</span>
+                                </div>
+                            </div>
+                            <div className="card-body">
+                                <div>
+                                    <h3>Signal Flow</h3>
+                                    <div className="meta">
+                                        <span>UX system</span>
+                                        <span>2026</span>
+                                    </div>
+                                </div>
+                                <div className="arrow">→</div>
+                            </div>
+                        </article>
+
+                        <article className="project-card">
+                            <div className="preview">
+                                <div className="badge">
+                                    <span>Launch</span>
+                                </div>
+                            </div>
+                            <div className="card-body">
+                                <div>
+                                    <h3>Arc & Ember</h3>
+                                    <div className="meta">
+                                        <span>Campaign art</span>
+                                        <span>2025</span>
+                                    </div>
+                                </div>
+                                <div className="arrow">→</div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section className="partners" id="about">
+                <div className="section-inner">
+                    <div className="logos" aria-label="Partner brands">
+                        <div className="logo-item">
+                            <div>◎</div>
+                            <span>Nova</span>
+                        </div>
+                        <div className="logo-item">
+                            <div>◈</div>
+                            <span>Fable</span>
+                        </div>
+                        <div className="logo-item">
+                            <div>▣</div>
+                            <span>Kite</span>
+                        </div>
+                        <div className="logo-item">
+                            <div>◇</div>
+                            <span>Harbor</span>
+                        </div>
+                        <div className="logo-item">
+                            <div>✧</div>
+                            <span>Orbit</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    );
 }
