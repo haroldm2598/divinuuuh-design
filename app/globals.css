@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "@clerk/ui/themes/shadcn.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -20,7 +21,7 @@
 @layer base {
     html {
         scroll-behavior: smooth;
-    @apply font-sans;
+        @apply font-sans;
     }
 
     body {
@@ -30,12 +31,12 @@
         font-family: Inter, sans-serif;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
-    @apply bg-background text-foreground;
+        @apply bg-background text-foreground;
     }
 
     * {
         box-sizing: border-box;
-    @apply border-border outline-ring/50;
+        @apply border-border outline-ring/50;
     }
 
     a {
