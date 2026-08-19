@@ -1,15 +1,8 @@
 "use client";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Hammer } from "lucide-react";
-import Button from "./ui/button";
 
 export default function Navbar() {
-    const isSignedIn = true;
-    const username = "Divinuuuh";
-    const handleAuthClick = () => {
-        // Handle authentication logic here
-        console.log("Login button clicked");
-    };
-
     return (
         <header className="navbar">
             <nav className="inner">
@@ -28,37 +21,27 @@ export default function Navbar() {
                 </div>
 
                 <div className="actions">
-                    {isSignedIn ? (
-                        <>
-                            <span className="greeting">
-                                {username
-                                    ? `Welcome, ${username}`
-                                    : "Signed in"}
-                            </span>
-
-                            <Button
-                                onClick={handleAuthClick}
-                                className="btn cursor-pointer"
-                                size="sm"
-                            >
-                                Log Out
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Button
-                                onClick={handleAuthClick}
+                    <Show when="signed-out">
+                        <SignInButton mode="modal">
+                            <button
                                 className="login cursor-pointer"
-                                size="sm"
-                                variant="ghost"
+                                type="button"
                             >
-                                Login
-                            </Button>
-                            <a href="#upload" className="cta">
-                                Get Started
-                            </a>
-                        </>
-                    )}
+                                Sign in
+                            </button>
+                        </SignInButton>
+                        <SignUpButton mode="modal">
+                            <button
+                                className="cta cursor-pointer"
+                                type="button"
+                            >
+                                Get started
+                            </button>
+                        </SignUpButton>
+                    </Show>
+                    <Show when="signed-in">
+                        <UserButton />
+                    </Show>
                 </div>
             </nav>
         </header>
