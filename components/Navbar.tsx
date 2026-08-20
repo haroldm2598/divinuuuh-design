@@ -1,6 +1,7 @@
 "use client";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Hammer } from "lucide-react";
+import Button from "./ui/button";
 
 export default function Navbar() {
     return (
@@ -23,20 +24,23 @@ export default function Navbar() {
                 <div className="actions">
                     <Show when="signed-out">
                         <SignInButton mode="modal">
-                            <button
+                            <Button
                                 className="login cursor-pointer"
                                 type="button"
+                                variant="ghost"
+                                size="sm"
                             >
                                 Sign in
-                            </button>
+                            </Button>
                         </SignInButton>
                         <SignUpButton mode="modal">
-                            <button
+                            <Button
                                 className="cta cursor-pointer"
                                 type="button"
+                                size="sm"
                             >
                                 Get started
-                            </button>
+                            </Button>
                         </SignUpButton>
                     </Show>
                     <Show when="signed-in">
