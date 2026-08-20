@@ -1,6 +1,10 @@
-import Button from "@/components/ui/button";
-import { ArrowRight, Layers } from "lucide-react";
 import Image from "next/image";
+import { ArrowRight, Layers } from "lucide-react";
+
+import LogoItem from "@/components/LogoItem";
+import Button from "@/components/ui/button";
+
+import { footerItem } from "@/lib/constants/constant";
 
 export default function Home() {
     return (
@@ -129,26 +133,9 @@ export default function Home() {
             <section className="partners" id="about">
                 <div className="section-inner">
                     <div className="logos" aria-label="Partner brands">
-                        <div className="logo-item">
-                            <div>◎</div>
-                            <span>Nova</span>
-                        </div>
-                        <div className="logo-item">
-                            <div>◈</div>
-                            <span>Fable</span>
-                        </div>
-                        <div className="logo-item">
-                            <div>▣</div>
-                            <span>Kite</span>
-                        </div>
-                        <div className="logo-item">
-                            <div>◇</div>
-                            <span>Harbor</span>
-                        </div>
-                        <div className="logo-item">
-                            <div>✧</div>
-                            <span>Orbit</span>
-                        </div>
+                        {footerItem.map(({ icon, name }) => (
+                            <LogoItem key={name} icon={icon} name={name} />
+                        ))}
                     </div>
                 </div>
             </section>
