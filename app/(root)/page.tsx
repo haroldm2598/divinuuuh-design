@@ -1,3 +1,7 @@
+import Button from "@/components/ui/button";
+import { ArrowRight, Layers } from "lucide-react";
+import Image from "next/image";
+
 export default function Home() {
     return (
         <main className="home">
@@ -18,30 +22,31 @@ export default function Home() {
                 </p>
 
                 <div className="actions">
-                    <button className="cta">Start a project</button>
-                    <button className="btn btn--secondary demo">
+                    <Button className="cta">
+                        Start a project <ArrowRight className="icon" />
+                    </Button>
+                    <Button variant="outline" size="lg" className="demo">
                         View case studies
-                    </button>
+                    </Button>
                 </div>
 
-                <div className="upload-shell">
+                <div id="upload" className="upload-shell">
                     <div className="grid-overlay" />
+
                     <div className="upload-card">
                         <div className="upload-head">
                             <div className="upload-icon">
-                                <span className="icon">✦</span>
+                                <Layers className="icon" />
                             </div>
-                            <h3>Creative direction for bold brands</h3>
-                            <p>
-                                From strategy to launch visuals, we shape
-                                standout digital experiences.
-                            </p>
+
+                            <h3>Upload your floor plan</h3>
+                            <p>Supports JPG, PNG, formats up to 10MB</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section className="projects" id="work">
+            <section className="projects">
                 <div className="section-inner">
                     <div className="section-head">
                         <div className="copy">
@@ -57,6 +62,13 @@ export default function Home() {
                     <div className="projects-grid">
                         <article className="project-card">
                             <div className="preview">
+                                <Image
+                                    src="https://roomify-mlhuk267-dfwu1i.puter.site/projects/1770803585402/rendered.png"
+                                    alt="project"
+                                    fill
+                                    className="object-cover"
+                                />
+
                                 <div className="badge">
                                     <span>Brand</span>
                                 </div>
@@ -69,7 +81,9 @@ export default function Home() {
                                         <span>2026</span>
                                     </div>
                                 </div>
-                                <div className="arrow">→</div>
+                                <div className="arrow">
+                                    <ArrowRight size={18} />
+                                </div>
                             </div>
                         </article>
 
