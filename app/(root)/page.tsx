@@ -5,6 +5,7 @@ import LogoItem from "@/components/LogoItem";
 import Button from "@/components/ui/button";
 
 import { footerItem } from "@/lib/constants/constant";
+import UploadDemo from "@/components/UploadDemo";
 
 export default function Home() {
     return (
@@ -46,6 +47,8 @@ export default function Home() {
                             <h3>Upload your floor plan</h3>
                             <p>Supports JPG, PNG, formats up to 10MB</p>
                         </div>
+
+                        <UploadDemo />
                     </div>
                 </div>
             </section>
