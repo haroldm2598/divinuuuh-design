@@ -36,7 +36,7 @@ export async function POST(request: Request) {
                             "image/webp",
                         ],
                         addRandomSuffix: true,
-                        maximumSizeInBytes: 50 * 1024 * 1024,
+                        maximumSizeInBytes: 10 * 1024 * 1024,
                         tokenPayload: JSON.stringify({ userId }),
                     };
                 } catch (err) {
