@@ -1,21 +1,38 @@
 "use client";
 
 import Upload from "@/components/Upload";
-import { redirect } from "next/navigation";
+import { upload } from "@vercel/blob/client";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function UploadDemo() {
-    const handleUploadComplete = async (base64Data: string) => {
-        const newId = Date.now().toString();
+    const router = useRouter();
+    const { getToken } = useAuth();
 
-        redirect(`/visualizer/${newId}`);
+    const handleUploadComplete = async (file: File) => {
+        try {
+            const sessionToken = await getToken();
+
+            if (!sessionToken) {
+                throw new Error("Please sign in again before uploading.");
+            }
+
+            const uploadedBlob = await upload(file.name, file, {
+                access: "public",
+                handleUploadUrl: "/api/upload-test",
+                headers: {
+                    Authorization: `Bearer ${sessionToken}`,
+                },
+                contentType: file.type,
+            });
+
+            router.push(
+                `/visualizer/${encodeURIComponent(uploadedBlob.pathname)}`,
+            );
+        } catch (error) {
+            console.error("Upload failed:", error);
+        }
     };
 
-    return (
-        <Upload
-            onComplete={handleUploadComplete}
-            // onComplete={(base64Data) => {
-            //     console.log("Upload Complete:", base64Data);
-            // }}
-        />
-    );
+    return <Upload onComplete={handleUploadComplete} />;
 }
