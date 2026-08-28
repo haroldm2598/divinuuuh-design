@@ -10,7 +10,7 @@ import {
 } from "@/lib/constants/constant";
 
 type UploadProps = {
-    onComplete?: (base64Data: string) => void;
+    onComplete?: (file: File) => void | Promise<void>;
 };
 
 export default function Upload({ onComplete }: UploadProps) {
@@ -40,7 +40,7 @@ export default function Upload({ onComplete }: UploadProps) {
                     if (nextProgress === 100) {
                         clearInterval(progressInterval);
                         setTimeout(
-                            () => onComplete?.(base64Data),
+                            () => onComplete?.(selectedFile),
                             REDIRECT_DELAY_MS,
                         );
                     }
