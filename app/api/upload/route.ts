@@ -9,31 +9,26 @@ export async function POST(request: Request) {
     const body = (await request.json()) as HandleUploadBody;
 
     try {
-        const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
-
-        if (!blobToken) {
-            throw new Error(
-                "Missing BLOB_READ_WRITE_TOKEN. Add it to your environment and restart the server.",
-            );
-        }
-
         const jsonResponse = await handleUpload({
-            token: blobToken,
+            token: process.env.BLOB_READ_WRITE_TOKEN,
             body,
             request,
             onBeforeGenerateToken: async () => {
                 try {
+                    // null nga yung lumabas
                     const { userId } = await auth();
 
-                    if (!userId)
+                    if (!userId) {
+                        // so hindi ma read yung userId from clerk
+                        console.log("Wala naman user natatanggap dine");
                         throw new Error(
-                            "Unauthorized: User must be signed to upload images",
+                            "Unauthorized: User must be signed in to upload files.",
                         );
+                    }
 
                     return {
                         allowedContentTypes: [
                             "image/jpeg",
-                            "image/jpg",
                             "image/png",
                             "image/webp",
                         ],
@@ -41,12 +36,14 @@ export async function POST(request: Request) {
                         maximumSizeInBytes: 10 * 1024 * 1024,
                         tokenPayload: JSON.stringify({ userId }),
                     };
-                } catch (err) {
-                    throw new Error(`Failed to generate upload token: ${err}`);
+                } catch (error) {
+                    throw new Error(
+                        `Failed to generate upload token: ${error instanceof Error ? error.message : "Unknown auth error"}`,
+                    );
                 }
             },
             onUploadCompleted: async ({ blob, tokenPayload }) => {
-                console.log("File Image uploaded to Blob", blob);
+                console.log("File uploaded to blob", blob.url);
 
                 const payload = tokenPayload ? JSON.parse(tokenPayload) : null;
 
@@ -63,10 +60,13 @@ export async function POST(request: Request) {
         });
 
         return NextResponse.json(jsonResponse);
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
 
-        const message = err instanceof Error ? err.message : "Upload failed";
+        const message =
+            error instanceof Error
+                ? error.message
+                : "An internal server error occurred";
         const status = message.includes("Unauthorized") ? 401 : 500;
 
         return NextResponse.json({ error: message }, { status });

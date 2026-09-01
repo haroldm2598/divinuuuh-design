@@ -7,22 +7,17 @@ import { useRouter } from "next/navigation";
 
 export default function UploadDemo() {
     const router = useRouter();
-    const { getToken } = useAuth();
+    const { isSignedIn } = useAuth();
 
     const handleUploadComplete = async (file: File) => {
         try {
-            const sessionToken = await getToken();
-
-            if (!sessionToken) {
+            if (!isSignedIn) {
                 throw new Error("Please sign in again before uploading.");
             }
 
             const uploadedBlob = await upload(file.name, file, {
                 access: "public",
-                handleUploadUrl: "/api/upload-test",
-                headers: {
-                    Authorization: `Bearer ${sessionToken}`,
-                },
+                handleUploadUrl: "/api/upload",
                 contentType: file.type,
             });
 
