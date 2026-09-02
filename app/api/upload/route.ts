@@ -6,6 +6,17 @@ import { auth } from "@clerk/nextjs/server";
 import { createBlueprintUpload } from "@/lib/services/upload.service";
 
 export async function POST(request: Request) {
+    const { userId, isAuthenticated } = await auth();
+
+    console.log("UPLOAD AUTH:", {
+        userId,
+        isAuthenticated,
+    });
+
+    if (!isAuthenticated || !userId) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = (await request.json()) as HandleUploadBody;
 
     try {
@@ -15,20 +26,10 @@ export async function POST(request: Request) {
             request,
             onBeforeGenerateToken: async () => {
                 try {
-                    // null nga yung lumabas
-                    const { userId } = await auth();
-
-                    if (!userId) {
-                        // so hindi ma read yung userId from clerk
-                        console.log("Wala naman user natatanggap dine");
-                        throw new Error(
-                            "Unauthorized: User must be signed in to upload files.",
-                        );
-                    }
-
                     return {
                         allowedContentTypes: [
                             "image/jpeg",
+                            "image/jpg",
                             "image/png",
                             "image/webp",
                         ],

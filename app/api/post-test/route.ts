@@ -4,8 +4,20 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function GET() {
     try {
+        // Get auth - now properly initialized by proxy.ts
         const { userId } = await auth();
-        console.log(userId);
+
+        // Explicit check - should never be null now
+        if (!userId) {
+            console.warn("❌ Auth failed: No userId found");
+            return NextResponse.json(
+                { error: "Unauthorized - No user session" },
+                { status: 401 },
+            );
+        }
+        console.log("===============");
+        console.log("Authenticated User ID:", userId);
+        console.log("===============");
 
         const postTest = await prisma.postTest.findMany({
             orderBy: {
@@ -15,7 +27,7 @@ export async function GET() {
 
         return NextResponse.json(postTest);
     } catch (err) {
-        console.error(err);
+        console.error("❌ API Error:", err);
 
         return NextResponse.json(
             { error: "Failed to fetch PostTest" },

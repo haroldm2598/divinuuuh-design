@@ -7,13 +7,15 @@ import { useRouter } from "next/navigation";
 
 export default function UploadDemo() {
     const router = useRouter();
-    const { isSignedIn } = useAuth();
+    const { isSignedIn, userId } = useAuth();
 
     const handleUploadComplete = async (file: File) => {
         try {
             if (!isSignedIn) {
                 throw new Error("Please sign in again before uploading.");
             }
+
+            console.log("this is client side. User ID:", userId);
 
             const uploadedBlob = await upload(file.name, file, {
                 access: "public",
