@@ -11,13 +11,13 @@ const isProtectedPage = createRouteMatcher([
 export default clerkMiddleware(async (auth, req) => {
     // ✅ Initialize auth context for ALL requests
     // This makes auth() available in API routes and pages
-    const authState = await auth();
+    // const authState = await auth();
 
-    console.log("========== CLERK PROXY ==========");
-    console.log("path:", req.nextUrl.pathname);
-    console.log("userId:", authState.userId);
-    console.log("isAuthenticated:", !!authState.userId);
-    console.log("================================");
+    // console.log("========== CLERK PROXY ==========");
+    // console.log("path:", req.nextUrl.pathname);
+    // console.log("userId:", authState.userId);
+    // console.log("isAuthenticated:", !!authState.userId);
+    // console.log("================================");
 
     // ✅ Only protect UI pages - NOT API routes
     // Pages redirect to /sign-in, APIs should return 401 themselves
