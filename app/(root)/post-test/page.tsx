@@ -12,12 +12,15 @@ interface PostTestProps {
 
 export default function PostTestPage() {
     const { data: postTest } = usePostTest<PostTestProps[]>("api/post-test");
-    // const { userId } = useAuth();
+    const { userId, isLoaded } = useAuth();
 
-    // if (!userId) {
-    //     console.log("this is for clientside:", userId);
-    //     unauthorized();
-    // }
+    if (!isLoaded) {
+        return <div>Loading...</div>;
+    }
+
+    if (!userId) {
+        unauthorized();
+    }
 
     return (
         <div className="min-h-screen mt-28 ml-5 text-2xl space-y-4">
