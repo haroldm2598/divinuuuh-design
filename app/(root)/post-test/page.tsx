@@ -1,5 +1,7 @@
 "use client";
 import { usePostTest } from "@/lib/hooks/usePostTest";
+import { useAuth } from "@clerk/nextjs";
+import { unauthorized } from "next/navigation";
 
 interface PostTestProps {
     id: string;
@@ -9,12 +11,14 @@ interface PostTestProps {
 }
 
 export default function PostTestPage() {
-    const { data: postTest, loading } =
-        usePostTest<PostTestProps[]>("api/post-test");
+    const { data: postTest } = usePostTest<PostTestProps[]>("api/post-test");
+    // const { userId } = useAuth();
 
-    if (loading) {
-        return <div>loading data......</div>;
-    }
+    // if (!userId) {
+    //     console.log("this is for clientside:", userId);
+    //     unauthorized();
+    // }
+
     return (
         <div className="min-h-screen mt-28 ml-5 text-2xl space-y-4">
             {postTest?.map((post) => {
