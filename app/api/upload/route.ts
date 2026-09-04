@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 import { handleUpload, HandleUploadBody } from "@vercel/blob/client";
 import { auth } from "@clerk/nextjs/server";
 
-import { createBlueprintUpload } from "@/lib/services/upload.service";
-
 export async function POST(request: Request) {
     const { userId, isAuthenticated } = await auth();
 
@@ -35,28 +33,12 @@ export async function POST(request: Request) {
                         ],
                         addRandomSuffix: true,
                         maximumSizeInBytes: 10 * 1024 * 1024,
-                        tokenPayload: JSON.stringify({ userId }),
                     };
                 } catch (error) {
                     throw new Error(
                         `Failed to generate upload token: ${error instanceof Error ? error.message : "Unknown auth error"}`,
                     );
                 }
-            },
-            onUploadCompleted: async ({ blob, tokenPayload }) => {
-                console.log("File uploaded to blob", blob.url);
-
-                const payload = tokenPayload ? JSON.parse(tokenPayload) : null;
-
-                if (!payload?.userId) {
-                    throw new Error("Missing user identity in upload payload.");
-                }
-
-                await createBlueprintUpload({
-                    clerkId: payload.userId,
-                    sourceImage: blob.url,
-                    sourceBlobKey: blob.pathname,
-                });
             },
         });
 

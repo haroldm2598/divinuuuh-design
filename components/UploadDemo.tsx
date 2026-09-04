@@ -23,6 +23,22 @@ export default function UploadDemo() {
                 contentType: file.type,
             });
 
+            const completionResponse = await fetch("/api/upload/complete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    url: uploadedBlob.url,
+                    pathname: uploadedBlob.pathname,
+                }),
+            });
+
+            if (!completionResponse.ok) {
+                const error = (await completionResponse.json()) as {
+                    error?: string;
+                };
+                throw new Error(error.error ?? "Failed to save the upload.");
+            }
+
             router.push(
                 `/visualizer/${encodeURIComponent(uploadedBlob.pathname)}`,
             );
