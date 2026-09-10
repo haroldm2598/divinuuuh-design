@@ -31,8 +31,8 @@ export default async function VisualizerPage({ params }: VisualizerProps) {
                 </p>
                 <div className="mt-8 overflow-hidden rounded-lg border bg-white">
                     <img
-                        src={blueprint.fileUrl}
-                        alt="Uploaded floor plan"
+                        src={blueprint.coverUrl}
+                        alt="Generated 3D floor plan"
                         className="h-auto max-h-[70vh] w-full object-contain"
                     />
                 </div>
