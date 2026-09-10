@@ -27,12 +27,14 @@ model PostTest {
 }
 
 model Blueprint {
-  id           Int      @id @default(autoincrement())
-  clerkId      String
-  fileUrl      String
-  fileBlobKey  String
-  coverUrl     String
-  coverBlobKey String?
-  fileSize     String
-  createdAt    DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  clerkId       String
+  fileUrl       String
+  fileBlobKey   String
+  coverUrl      String
+  coverBlobKey  String?
+  renderUrl     String?
+  renderBlobKey String?
+  fileSize      String
+  createdAt     DateTime @default(now())
 }

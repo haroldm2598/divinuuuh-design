@@ -4,6 +4,7 @@ import Upload from "@/components/Upload";
 import { upload } from "@vercel/blob/client";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { generate3DView } from "@/lib/services/generate3d.service";
 
 export default function UploadDemo() {
     const router = useRouter();
@@ -23,12 +24,18 @@ export default function UploadDemo() {
                 contentType: file.type,
             });
 
+            const { renderedImage } = await generate3DView({
+                sourceImage: uploadedBlob.url,
+                projectId: userId,
+            });
+
             const completionResponse = await fetch("/api/upload/complete", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     url: uploadedBlob.url,
                     pathname: uploadedBlob.pathname,
+                    renderedImage,
                 }),
             });
 
@@ -39,8 +46,13 @@ export default function UploadDemo() {
                 throw new Error(error.error ?? "Failed to save the upload.");
             }
 
+            const completion = (await completionResponse.json()) as {
+                visualizerPath?: string;
+            };
+
             router.push(
-                `/visualizer/${encodeURIComponent(uploadedBlob.pathname)}`,
+                completion.visualizerPath ??
+                    `/visualizer/${encodeURIComponent(uploadedBlob.pathname)}`,
             );
         } catch (error) {
             console.error("Upload failed:", error);

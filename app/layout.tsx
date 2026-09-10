@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -27,6 +28,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
         >
             <body className="min-h-full flex flex-col">
+                <Script
+                    src="https://js.puter.com/v2/"
+                    strategy="beforeInteractive"
+                />
                 <ClerkProvider appearance={{ theme: shadcn }}>
                     <Navbar />
                     {children}

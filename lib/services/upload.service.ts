@@ -1,38 +1,73 @@
 import { prisma } from "@/lib/prisma";
+import { put } from "@vercel/blob";
 
-type UploadImageToHostingInput = {
-    hosting: "vercel-blob";
-    url: string;
-    projectId: string;
-    label: "source" | "rendered";
-    blobKey?: string;
+const parseImage = async (url: string) => {
+    const dataUrlMatch = url.match(/^data:([^;,]+)(;base64)?,([\s\S]*)$/);
+
+    if (dataUrlMatch) {
+        const [, contentType, base64Marker, payload] = dataUrlMatch;
+        const body = base64Marker
+            ? Buffer.from(payload, "base64")
+            : Buffer.from(decodeURIComponent(payload));
+
+        return {
+            body,
+            contentType,
+            extension: contentType.split("/")[1] || "bin",
+        };
+    }
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(
+            `Failed to fetch rendered image: ${response.status} ${response.statusText}`,
+        );
+    }
+
+    const contentType = response.headers.get("content-type")?.split(";")[0];
+
+    if (!contentType?.startsWith("image/")) {
+        throw new Error("Rendered image must be an image URL or data URL.");
+    }
+
+    return {
+        body: Buffer.from(await response.arrayBuffer()),
+        contentType,
+        extension: contentType.split("/")[1] || "bin",
+    };
 };
 
-type HostedImage = {
-    url: string;
-    blobKey?: string;
-};
-
-async function uploadImageToHosting({
+const uploadImageToHosting = async ({
     url,
+    projectId,
+    label,
     blobKey,
-}: UploadImageToHostingInput): Promise<HostedImage> {
-    return { url, blobKey };
-}
+}: UploadImageToHostingInput): Promise<HostedImage> => {
+    if (blobKey && /^https?:\/\//.test(url)) {
+        return { url, blobKey };
+    }
 
-type CreateBlueprintUploadInput = {
-    clerkId: string;
-    sourceImage: string;
-    sourceBlobKey: string;
-    renderedImage?: string | null;
+    const image = await parseImage(url);
+    const uploaded = await put(
+        `blueprints/${projectId}/${label}-${Date.now()}.${image.extension}`,
+        image.body,
+        {
+            access: "public",
+            addRandomSuffix: true,
+            contentType: image.contentType,
+        },
+    );
+
+    return { url: uploaded.url, blobKey: uploaded.pathname };
 };
 
-export async function createBlueprintUpload({
+export const createBlueprintUpload = async ({
     clerkId,
     sourceImage,
     sourceBlobKey,
     renderedImage,
-}: CreateBlueprintUploadInput) {
+}: CreateBlueprintUploadInput) => {
     const projectId = clerkId;
     const hosting = "vercel-blob" as const;
 
@@ -46,9 +81,15 @@ export async function createBlueprintUpload({
           })
         : null;
 
-    const hostedRender = projectId && renderedImage ? renderedImage : null;
-
-    console.log("Rendered image hosting is deferred:", hostedRender);
+    const hostedRender =
+        projectId && renderedImage
+            ? await uploadImageToHosting({
+                  hosting,
+                  url: renderedImage,
+                  projectId,
+                  label: "rendered",
+              })
+            : null;
 
     if (!hostedSource) {
         throw new Error("Source image hosting failed.");
@@ -59,20 +100,23 @@ export async function createBlueprintUpload({
             clerkId,
             fileUrl: hostedSource.url,
             fileBlobKey: hostedSource.blobKey ?? sourceBlobKey,
-            coverUrl: hostedSource.url,
+            coverUrl: hostedRender?.url ?? hostedSource.url,
+            coverBlobKey: hostedRender?.blobKey,
+            renderUrl: hostedRender?.url,
+            renderBlobKey: hostedRender?.blobKey,
             fileSize: "0",
         },
     });
-}
+};
 
-export async function getBlueprintByBlobKey(
+export const getBlueprintByBlobKey = async (
     clerkId: string,
     fileBlobKey: string,
-) {
+) => {
     return prisma.blueprint.findFirst({
         where: {
             clerkId,
             fileBlobKey,
         },
     });
-}
+};

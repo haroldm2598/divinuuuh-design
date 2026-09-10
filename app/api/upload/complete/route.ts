@@ -6,6 +6,7 @@ import { createBlueprintUpload } from "@/lib/services/upload.service";
 type UploadCompletionBody = {
     url?: unknown;
     pathname?: unknown;
+    renderedImage?: unknown;
 };
 
 export async function POST(request: Request) {
@@ -34,12 +35,17 @@ export async function POST(request: Request) {
             clerkId: userId,
             sourceImage: body.url,
             sourceBlobKey: body.pathname,
+            renderedImage:
+                typeof body.renderedImage === "string"
+                    ? body.renderedImage
+                    : null,
         });
 
         return NextResponse.json({
             id: blueprint.id,
             fileUrl: blueprint.fileUrl,
             fileBlobKey: blueprint.fileBlobKey,
+            visualizerPath: `/visualizer/${encodeURIComponent(blueprint.fileBlobKey)}`,
         });
     } catch (error) {
         console.error("Failed to save blueprint upload:", error);
