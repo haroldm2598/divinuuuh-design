@@ -3,12 +3,6 @@ import { NextResponse } from "next/server";
 
 import { createBlueprintUpload } from "@/lib/services/upload.service";
 
-type UploadCompletionBody = {
-    url?: unknown;
-    pathname?: unknown;
-    renderedImage?: unknown;
-};
-
 export async function POST(request: Request) {
     const { userId } = await auth();
 

@@ -17,3 +17,24 @@ type CreateBlueprintUploadInput = {
     sourceBlobKey: string;
     renderedImage?: string | null;
 };
+
+type BrowserPuter = {
+    ai: {
+        txt2img: (
+            prompt: string,
+            options: {
+                provider: string;
+                model: string;
+                input_image: string;
+                input_image_mime_type: string;
+                ratio: { w: number; h: number };
+            },
+        ) => Promise<HTMLImageElement>;
+    };
+};
+
+type UploadCompletionBody = {
+    url?: unknown;
+    pathname?: unknown;
+    renderedImage?: unknown;
+};
