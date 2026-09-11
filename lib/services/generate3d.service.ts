@@ -6,21 +6,6 @@ interface Generate3DViewParams {
     projectId?: string | null;
 }
 
-type BrowserPuter = {
-    ai: {
-        txt2img: (
-            prompt: string,
-            options: {
-                provider: string;
-                model: string;
-                input_image: string;
-                input_image_mime_type: string;
-                ratio: { w: number; h: number };
-            },
-        ) => Promise<HTMLImageElement>;
-    };
-};
-
 export const generate3DView = async ({ sourceImage }: Generate3DViewParams) => {
     const dataUrl = sourceImage.startsWith("data:")
         ? sourceImage
